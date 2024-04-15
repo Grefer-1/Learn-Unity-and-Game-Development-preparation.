@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Pong_Player : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 3f;
 

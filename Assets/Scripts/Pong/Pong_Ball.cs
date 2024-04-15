@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Ball : MonoBehaviour
+public class Pong_Ball : MonoBehaviour
 {
     [SerializeField] private GameObject[] paddles;
     [SerializeField] private TextMeshProUGUI scorePaddleLeftText;

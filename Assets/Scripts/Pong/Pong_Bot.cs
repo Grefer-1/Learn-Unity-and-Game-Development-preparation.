@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bot : MonoBehaviour
+public class Pong_Bot : MonoBehaviour
 {
     private float elapsed;
     private float duration;
