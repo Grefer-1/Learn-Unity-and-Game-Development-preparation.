@@ -55,8 +55,8 @@ public class Breakout_GameManager : MonoBehaviour
                     else
                         spawnedBrick = Instantiate(defaultBrick, spawnStartPoint + new Vector3(1f * j + spawnOffsetX * j, 0f, 0f) , Quaternion.identity, spawnParent);
                     spawnedBrick.SetActive(true);
-                    spawnedBrick.GetComponent<Breakout_Brick>().SetScore(8 - i);
-                    spawnedBrick.GetComponent<SpriteRenderer>().color = scoreColors[8 - 1 - i];
+                    spawnedBrick.GetComponent<Breakout_Brick>().SetScore(rowCount - i);
+                    spawnedBrick.GetComponent<SpriteRenderer>().color = scoreColors[rowCount - 1 - i];
                     spawnedBricks.Add(spawnedBrick);
                 }
                 else
@@ -66,8 +66,8 @@ public class Breakout_GameManager : MonoBehaviour
                     else
                         spawnedBrick = Instantiate(defaultBrick, spawnStartPoint + new Vector3(1f * j + spawnOffsetX * j, spawnOffsetY * i, 0f), Quaternion.identity, spawnParent);
                     spawnedBrick.SetActive(true);
-                    spawnedBrick.GetComponent<Breakout_Brick>().SetScore(8 - i);
-                    spawnedBrick.GetComponent<SpriteRenderer>().color = scoreColors[8 - 1 - i];
+                    spawnedBrick.GetComponent<Breakout_Brick>().SetScore(rowCount - i);
+                    spawnedBrick.GetComponent<SpriteRenderer>().color = scoreColors[rowCount - 1 - i];
                     spawnedBricks.Add(spawnedBrick);
                 }
             }
