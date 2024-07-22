@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Game2048_GameManager : MonoBehaviour
 {
-    public TileBoard TileBoard;
+    public Game2048_TileBoard TileBoard;
     public CanvasGroup CanvasGroup;
     public TextMeshProUGUI Score;
     public TextMeshProUGUI HighScore;
@@ -16,12 +16,6 @@ public class Game2048_GameManager : MonoBehaviour
     void Start()
     {
         NewGame();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void NewGame()

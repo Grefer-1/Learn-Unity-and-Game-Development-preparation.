@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Tile State")]
-public class TileState : ScriptableObject
+public class Game2048_TileState : ScriptableObject
 {
     public Color Text;
     public Color Background;

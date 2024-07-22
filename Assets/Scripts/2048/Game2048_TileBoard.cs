@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class TileBoard : MonoBehaviour
+public class Game2048_TileBoard : MonoBehaviour
 {
-    public Tile TilePrefab;
-    public TileState[] TileStates;
+    public Game2048_Tile TilePrefab;
+    public Game2048_TileState[] TileStates;
     public Game2048_GameManager GameManager;
 
-    private TileGrid Grid;
-    private List<Tile> Tiles;
+    private Game2048_TileGrid Grid;
+    private List<Game2048_Tile> Tiles;
 
     private bool IsMoveable;
 
     public void ClearBoard()
     {
-        foreach (TileCell cell in Grid.Cells)
+        foreach (Game2048_TileCell cell in Grid.Cells)
             cell.Tile = null;
 
-        foreach (Tile tile in Tiles)
+        foreach (Game2048_Tile tile in Tiles)
             Destroy(tile.gameObject);
         
         Tiles.Clear();
@@ -27,7 +27,7 @@ public class TileBoard : MonoBehaviour
 
     public void CreateTile()
     {
-        Tile tile = Instantiate(TilePrefab, Grid.transform);
+        Game2048_Tile tile = Instantiate(TilePrefab, Grid.transform);
 
         if (Random.value < 0.75f)
             tile.SetState(TileStates[0], 2);
@@ -40,14 +40,8 @@ public class TileBoard : MonoBehaviour
 
     void Awake()
     {
-        Grid = GetComponentInChildren<TileGrid>();
-        Tiles = new List<Tile>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
+        Grid = GetComponentInChildren<Game2048_TileGrid>();
+        Tiles = new List<Game2048_Tile>();
     }
 
     // Update is called once per frame
@@ -56,22 +50,24 @@ public class TileBoard : MonoBehaviour
         if (IsMoveable)
         {
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-            {
                 MoveTiles(Vector2Int.up, 0, 1, 1, 1);
-            }
             else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-            {
                 MoveTiles(Vector2Int.down, 0, 1, Grid.Height - 2, -1);
-            }
             else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-            {
                 MoveTiles(Vector2Int.left, 1, 1, 0, 1);
-            }
             else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-            {
                 MoveTiles(Vector2Int.right, Grid.Width - 2, -1, 0, 1);
-            }
         }
+    }
+
+    private void OnEnable()
+    {
+        IsMoveable = true;
+    }
+
+    private void OnDisable()
+    {
+        IsMoveable = false;
     }
 
     private void MoveTiles(Vector2Int direction, int startX, int incrementX, int startY, int incrementY)
@@ -82,8 +78,8 @@ public class TileBoard : MonoBehaviour
         {
             for (int y = startY; y >= 0 && y < Grid.Height; y += incrementY)
             {
-                TileCell cell = Grid.GetCell(x, y);
-                if (cell.IsEmpty)
+                Game2048_TileCell cell = Grid.GetCell(x, y);
+                if (!cell.IsEmpty)
                     changed |= MoveTile(cell.Tile, direction);
             }
         }
@@ -92,10 +88,10 @@ public class TileBoard : MonoBehaviour
             StartCoroutine(WaitTillMoveable());
     }
 
-    private bool MoveTile(Tile tile, Vector2Int direction)
+    private bool MoveTile(Game2048_Tile tile, Vector2Int direction)
     {
-        TileCell newCell = null;
-        TileCell nextCell = Grid.GetNextCell(tile.Cell, direction);
+        Game2048_TileCell newCell = null;
+        Game2048_TileCell nextCell = Grid.GetNextCell(tile.Cell, direction);
 
         while (nextCell != null)
         {
@@ -121,7 +117,7 @@ public class TileBoard : MonoBehaviour
         return false;
     }
 
-    private void Merge(Tile a, Tile b)
+    private void Merge(Game2048_Tile a, Game2048_Tile b)
     {
         Tiles.Remove(a);
         a.Merge(b.Cell);
@@ -134,12 +130,12 @@ public class TileBoard : MonoBehaviour
         GameManager.Scored(value);
     }
 
-    private bool Mergeable(Tile a, Tile b)
+    private bool Mergeable(Game2048_Tile a, Game2048_Tile b)
     {
         return a.Value == b.Value && !b.Locked;
     }
 
-    private int IndexOf(TileState state)
+    private int IndexOf(Game2048_TileState state)
     {
         for (int i = 0; i < TileStates.Length; i++)
             if (state == TileStates[i]) return i;
@@ -152,7 +148,7 @@ public class TileBoard : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         IsMoveable = true;
 
-        foreach (Tile tile in Tiles)
+        foreach (Game2048_Tile tile in Tiles)
             tile.Unlock();
 
         if (Tiles.Count != Grid.Size)
@@ -166,12 +162,12 @@ public class TileBoard : MonoBehaviour
     {
         if (Tiles.Count != Grid.Size) return false;
 
-        foreach (Tile tile in Tiles)
+        foreach (Game2048_Tile tile in Tiles)
         {
-            TileCell up = Grid.GetNextCell(tile.Cell, Vector2Int.up);
-            TileCell down = Grid.GetNextCell(tile.Cell, Vector2Int.down);
-            TileCell left = Grid.GetNextCell(tile.Cell, Vector2Int.left);
-            TileCell right = Grid.GetNextCell(tile.Cell, Vector2Int.right);
+            Game2048_TileCell up = Grid.GetNextCell(tile.Cell, Vector2Int.up);
+            Game2048_TileCell down = Grid.GetNextCell(tile.Cell, Vector2Int.down);
+            Game2048_TileCell left = Grid.GetNextCell(tile.Cell, Vector2Int.left);
+            Game2048_TileCell right = Grid.GetNextCell(tile.Cell, Vector2Int.right);
 
             if (up != null && Mergeable(tile, up.Tile)) return false;
             if (down != null && Mergeable(tile, down.Tile)) return false;

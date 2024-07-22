@@ -4,10 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Tile : MonoBehaviour
+public class Game2048_Tile : MonoBehaviour
 {
-    public TileState State {  get; private set; }
-    public TileCell Cell { get; private set; }
+    public Game2048_TileState State {  get; private set; }
+    public Game2048_TileCell Cell { get; private set; }
     public int Value { get; private set; }
     public bool Locked { get; private set; }
 
@@ -22,7 +22,7 @@ public class Tile : MonoBehaviour
 
     public void Unlock() => Locked = false;
 
-    public void SetState(TileState state, int value)
+    public void SetState(Game2048_TileState state, int value)
     {
         State = state;
         Value = value;
@@ -31,7 +31,7 @@ public class Tile : MonoBehaviour
         Text.text = Value.ToString();
     }
 
-    public void Spawn(TileCell cell)
+    public void Spawn(Game2048_TileCell cell)
     {
         if (Cell != null)
             Cell.Tile = null;
@@ -41,18 +41,24 @@ public class Tile : MonoBehaviour
         transform.position = cell.transform.position;
     }
 
-    public void MoveTo(TileCell cell)
-    {
-        StartCoroutine(Animate(cell.transform.position));
-    }
-
-    public void Merge(TileCell cell)
+    public void MoveTo(Game2048_TileCell cell)
     {
         if (Cell != null)
             Cell.Tile = null;
 
-        Cell.Tile = null;
-        Cell.Tile.Locked = true;
+        Cell = cell;
+        cell.Tile = this;
+
+        StartCoroutine(Animate(cell.transform.position));
+    }
+
+    public void Merge(Game2048_TileCell cell)
+    {
+        if (Cell != null)
+            Cell.Tile = null;
+
+        Cell = null;
+        cell.Tile.Locked = true;
 
         StartCoroutine(Animate(cell.transform.position, true));
     }
@@ -75,17 +81,5 @@ public class Tile : MonoBehaviour
 
         if (merge)
             Destroy(gameObject);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
