@@ -26,7 +26,12 @@ public class Breakout_Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        int side = 1;
+        if (collision.transform.position.x - transform.position.x > 0f && collision.transform.name == "Paddle")
+            side = -1;
+        else
+            side = 1;
         Vector3 direction = Vector3.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
-        rb.velocity = new Vector2(Mathf.Sign(direction.x), Mathf.Sign(direction.y)) * speed;
+        rb.velocity = new Vector2(side * Mathf.Sign(direction.x), Mathf.Sign(direction.y)) * speed;
     }
 }
